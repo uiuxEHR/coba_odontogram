@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coba_PengkajianOdontogram</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --pixel-primary: #4e73df;
+            --pixel-blue-light: #f0f3ff;
+            --pixel-success: #1cc88a;
+            --pixel-border: #e3e6f0;
+            --pixel-text-dark: #3a3b45;
+            --pixel-text-muted: #858796;
+            --pixel-bg-gray: #f8f9fc;
+            --pixel-danger: #e74a3b;
+            --pixel-warning: #f6c23e;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #f0f2f5;
+            padding: 20px;
+            color: var(--pixel-text-dark);
+            margin: 0;
+        }
+
+        .odontogram-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+
+        .section-header {
+            background-color: var(--pixel-blue-light);
+            border: 1px solid var(--pixel-border);
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .icon-container {
+            background: var(--pixel-primary);
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .header-text h2 { margin: 0; font-size: 15px; font-weight: 800; }
+        .header-text p { margin: 0; font-size: 11px; color: var(--pixel-text-muted); }
+
+        .card-content {
+            border: 1px solid var(--pixel-border);
+            border-top: none;
+            padding: 20px;
+        }
+
+        label { font-weight: 800; display: block; margin-bottom: 8px; font-size: 12px; }
+        .hint-text { font-size: 11px; color: var(--pixel-text-muted); margin-bottom: 12px; font-style: italic; }
+
+        .form-control {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #d1d3e2;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-family: inherit;
+        }
+
+        .patient-type-box {
+            background: var(--pixel-bg-gray);
+            border: 1px solid var(--pixel-border);
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+        }
+
+        .radio-group { display: flex; gap: 20px; margin-top: 5px; flex-wrap: wrap; }
+        .radio-item { display: flex; align-items: center; gap: 8px; font-weight: 700; cursor: pointer; }
+
+        .odontogram-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            background: var(--pixel-bg-gray);
+            padding: 12px;
+            border: 1px solid var(--pixel-border);
+            border-radius: 6px;
+            margin-bottom: 15px;
+        }
+        .legend-item { display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; }
+        .legend-color { width: 14px; height: 14px; border-radius: 3px; border: 1px solid rgba(0,0,0,0.1); }
+
+        .odontogram-view-wrapper {
+            display: none;
+            flex-direction: column;
+            gap: 12px;
+            align-items: center;
+            background: #fff;
+            padding: 20px;
+            border: 1px solid var(--pixel-border);
+            border-radius: 6px;
+            margin-bottom: 20px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .jaw-block {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 100%;
+        }
+
+        .teeth-row { 
+            display: flex; 
+            justify-content: center;
+            gap: 4px;
+        }
+
+        .quadrant-group {
+            display: flex;
+            gap: 4px;
+        }
+
+        .quadrant-separator {
+            width: 20px;
+        }
+        
+        .tooth-btn {
+            width: 34px;
+            height: 44px;
+            background: #ffffff;
+            border: 2px solid var(--pixel-primary);
+            color: var(--pixel-primary);
+            border-radius: 4px;
+            font-weight: 800;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            user-select: none;
+        }
+
+        .tooth-btn:hover { background: var(--pixel-blue-light); transform: translateY(-2px); }
+        
+        .tooth-btn.selected { 
+            background: var(--pixel-warning) !important; 
+            color: #333 !important; 
+            border-color: #cca025 !important;
+            box-shadow: 0 0 0 3px rgba(246, 194, 62, 0.4); 
+        }
+        .tooth-child { border-color: var(--pixel-success); color: #17a673; }
+
+        .odontogram-form-block {
+            background: #f1f3f9;
+            border: 1px solid var(--pixel-border);
+            border-radius: 6px;
+            padding: 15px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .row { display: flex; gap: 20px; flex-wrap: wrap; }
+        .col { flex: 1; min-width: 200px; }
+
+        .btn-pixel { padding: 8px 16px; border-radius: 6px; font-weight: 700; font-size: 12px; border: none; cursor: pointer; }
+        .btn-blue { background: var(--pixel-primary); color: white; }
+        .btn-blue:hover { background: #2e59d9; }
+        .btn-success { background: var(--pixel-success); color: white; padding: 12px 24px; font-size: 14px; }
+        .btn-success:hover { background: #169b6b; }
+        .btn-delete { background: var(--pixel-danger); color: white; border: none; width: 30px; height: 30px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; margin: 0 auto; }
+
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+            margin-top: 10px;
+            border: 1px solid var(--pixel-border);
+            border-radius: 6px;
+        }
+
+        table { width: 100%; border-collapse: collapse; }
+        th { text-align: left; background: var(--pixel-bg-gray); padding: 12px; border-bottom: 2px solid var(--pixel-border); font-size: 11px; text-transform: uppercase; color: var(--pixel-text-muted); white-space: nowrap; }
+        td { padding: 10px; border-bottom: 1px solid var(--pixel-border); vertical-align: middle; font-size: 13px; }
+        .badge-info { background: #e0e7ff; color: var(--pixel-primary); padding: 4px 8px; border-radius: 4px; font-weight: 800; font-size: 11px; display: inline-block; }
+
+        .result-card {
+            max-width: 1100px;
+            margin: 30px auto 0 auto;
+            background: #ffffff;
+            border-radius: 8px;
+            border: 2px solid var(--pixel-success);
+            box-shadow: 0 0.5rem 2rem 0 rgba(28, 200, 138, 0.15);
+            display: none;
+            overflow: hidden;
+        }
+
+        .result-header {
+            background-color: #f0fff4;
+            border-bottom: 2px solid var(--pixel-success);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .result-header h3 { margin: 0; font-size: 16px; color: #169b6b; font-weight: 800; }
+        
+        .result-grid-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            background: var(--pixel-bg-gray);
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--pixel-border);
+        }
+
+        .info-item p { margin: 2px 0; font-size: 13px; }
+        .info-item .info-label { color: var(--pixel-text-muted); font-size: 11px; font-weight: 700; text-transform: uppercase; }
+        .info-item .info-value { font-weight: 700; color: var(--pixel-text-dark); }
+
+        .result-table { width: 100%; border-collapse: collapse; }
+        .result-table th { background: #f1f3f9; color: var(--pixel-text-dark); font-weight: 800; }
+        .result-table td { padding: 12px; font-size: 13px; }
+        .badge-result { background: #f8d7da; color: #721c24; padding: 4px 8px; border-radius: 4px; font-weight: 700; font-size: 12px; display: inline-block; }
+        .badge-result.normal { background: #d4edda; color: #155724; }
+
+        @media (max-width: 768px) {
+            body { padding: 10px; }
+            .card-content { padding: 12px; }
+            .radio-group { flex-direction: column; gap: 10px; }
+            .odontogram-view-wrapper { padding: 12px 8px; }
+
+            .teeth-row {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 16px;
+                width: 100%;
+            }
+
+            .quadrant-group {
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                gap: 4px;
+                background: #fdfdfd;
+                padding: 6px;
+                border: 1px dashed #d1d3e2;
+                border-radius: 6px;
+            }
+
+            #odontogramDewasa .quadrant-group {
+                grid-template-columns: repeat(4, 1fr); 
+            }
+
+            #odontogramAnak .quadrant-group {
+                grid-template-columns: repeat(5, 1fr); 
+            }
+
+            .quadrant-separator {
+                display: none;
+            }
+
+            .tooth-btn {
+                width: 100%;
+                height: 40px;
+                font-size: 12px;
+            }
+
+            .odontogram-form-block .row { flex-direction: column; gap: 12px; }
+            .odontogram-form-block .col { min-width: 100%; }
+            .odontogram-form-block div[style*="justify-content: flex-end"] {
+                flex-direction: column-reverse;
+                gap: 8px !important;
+            }
+            .btn-pixel, .btn-success { width: 100%; padding: 12px; text-align: center; box-sizing: border-box; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="odontogram-container">
+    <div class="section-header">
+        <div class="icon-container">🦷</div>
+        <div class="header-text">
+            <h2>Pengkajian Odontogram</h2>
+            <p>Pilih kategori umur pasien terlebih dahulu untuk menampilkan peta tata letak gigi</p>
+        </div>
+    </div>
+
+    <div class="card-content">
+        <div class="patient-type-box">
+            <label>Jenis Kategori Pasien <span class="required">*</span></label>
+            <div class="radio-group">
+                <label class="radio-item">
+                    <input type="radio" name="patient_category" value="dewasa" onclick="switchOdontogramView('dewasa')"> Pasien Dewasa (Gigi Permanen)
+                </label>
+                <label class="radio-item">
+                    <input type="radio" name="patient_category" value="anak" onclick="switchOdontogramView('anak')"> Pasien Anak (Gigi Susu)
+                </label>
+            </div>
+        </div>
+
+        <div class="odontogram-legend">
+            <div class="legend-item"><div class="legend-color" style="background: #ffffff; border: 2px solid var(--pixel-primary);"></div> Gigi Permanen</div>
+            <div class="legend-item"><div class="legend-color" style="background: #ffffff; border: 2px solid var(--pixel-success);"></div> Gigi Susu (Anak)</div>
+            <div class="legend-item"><div class="legend-color" style="background: var(--pixel-warning);"></div> Sedang Dipilih</div>
+            <div class="legend-item"><div class="legend-color" style="background: #eaecf4; border: 2px solid #b7b9cc;"></div> Sudah Terisi Data</div>
+        </div>
+
+        <p class="hint-text">*Petunjuk: Anda dapat memilih beberapa gigi sekaligus untuk mencatat kondisi yang sama.</p>
+
+        <div id="odontogramDewasa" class="odontogram-view-wrapper">
+            <div class="jaw-block">
+                <label style="margin-bottom: 2px; color: var(--pixel-text-dark)">Rahang Atas (Upper Jaw)</label>
+                <div class="teeth-row">
+                    <div class="quadrant-group">
+                        <div class="tooth-btn" onclick="toggleToothSelection('18', this)">18</div>
+                        <div class="tooth-btn" onclick="toggleToothSelection('17', this)">17</div>
+                        <div class="tooth-btn" onclick="toggleToothSelection('16', this)">16</div>
+                        <div class="tooth-btn" onclick="toggleToothSelection('15', this)">15</div>
+                        <div class="tooth-btn" onclick="toggleToothSelection('14', this)">14</div>
+                        <div class="tooth-btn" onclick="toggleToothSelection('13', this)">13</div>
+                        <div class="tooth-btn" onclick="toggleToothSelection('12', this)">12</div>
+                        <div class="tooth-btn" onclick="toggleToothSelection('11', this)">11</div>
+                    </div>
+                    <div class="quadrant-separator"></div>
+                    <div class="quadrant-group">
+                        <div class="tooth-btn" onclick="toggleToothSelection('21', this)">21</div>
+                        <div class="tooth-btn" onclick="toggleToothSelection('22', this)">22</div>
+                        <div class="tooth-btn" onclick="toggleToothSelection('23', this)">23</div>
+                        <div class="tooth-btn" onclick="toggleToothSelection('24', this)">24</div>
+                        <div class="tooth-btn" onclick="toggleToothSelection('25', this)">25</div>
+                        <div class="tooth-btn" onclick="toggleToothSelection('26', this)">26</div>
+                        <div class="tooth-btn" onclick="toggleToothSelection('27', this)">27</div>
+                        <div class="tooth-btn" onclick="toggleToothSelection('28', this)">28</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="jaw-block" style="margin-top: 15px;">
+                <label style="margin-bottom: 2px; color: var(--pixel-text-dark)">Rahang Bawah (Lower Jaw)</label>
+                <div class="teeth-row">
+                    <div class="quadrant-group">
+                        <div class="tooth-btn" onclick="toggleToothSelection('48', this)">48</div>
+                        <div class="tooth-btn" onclick="toggleToothSelection('47', this)">47</div>
+                        <div class="tooth-btn" onclick="toggleToothSelection('46', this)">46</div>
+                        <div class="tooth-btn" onclick="toggleToothSelection('45', this)">45</div>
+                        <div class="tooth-btn" onclick="toggleToothSelection('44', this)">44</div>
+                        <div class="tooth-btn" onclick="toggleToothSelection('43', this)">43</div>
+                        <div class="tooth-btn" onclick="toggleToothSelection('42', this)">42</div>
+                        <div class="tooth-btn" onclick="toggleToothSelection('41', this)">41</div>
+                    </div>
+                    <div class="quadrant-separator"></div>
+                    <div class="quadrant-group">
+                        <div class="tooth-btn" onclick="toggleToothSelection('31', this)">31</div>
+                        <div class="tooth-btn" onclick="toggleToothSelection('32', this)">32</div>
+                        <div class="tooth-btn" onclick="toggleToothSelection('33', this)">33</div>
+                        <div class="tooth-btn" onclick="toggleToothSelection('34', this)">34</div>
+                        <div class="tooth-btn" onclick="toggleToothSelection('35', this)">35</div>
+                        <div class="tooth-btn" onclick="toggleToothSelection('36', this)">36</div>
+                        <div class="tooth-btn" onclick="toggleToothSelection('37', this)">37</div>
+                        <div class="tooth-btn" onclick="toggleToothSelection('38', this)">38</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="odontogramAnak" class="odontogram-view-wrapper">
+            <div class="jaw-block">
+                <label style="margin-bottom: 2px; color: var(--pixel-text-dark)">Rahang Atas (Susu)</label>
+                <div class="teeth-row">
+                    <div class="quadrant-group">
+                        <div class="tooth-btn tooth-child" onclick="toggleToothSelection('55', this)">55</div>
+                        <div class="tooth-btn tooth-child" onclick="toggleToothSelection('54', this)">54</div>
+                        <div class="tooth-btn tooth-child" onclick="toggleToothSelection('53', this)">53</div>
+                        <div class="tooth-btn tooth-child" onclick="toggleToothSelection('52', this)">52</div>
+                        <div class="tooth-btn tooth-child" onclick="toggleToothSelection('51', this)">51</div>
+                    </div>
+                    <div class="quadrant-separator"></div>
+                    <div class="quadrant-group">
+                        <div class="tooth-btn tooth-child" onclick="toggleToothSelection('61', this)">61</div>
+                        <div class="tooth-btn tooth-child" onclick="toggleToothSelection('62', this)">62</div>
+                        <div class="tooth-btn tooth-child" onclick="toggleToothSelection('63', this)">63</div>
+                        <div class="tooth-btn tooth-child" onclick="toggleToothSelection('64', this)">64</div>
+                        <div class="tooth-btn tooth-child" onclick="toggleToothSelection('65', this)">65</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="jaw-block" style="margin-top: 15px;">
+                <label style="margin-bottom: 2px; color: var(--pixel-text-dark)">Rahang Bawah (Susu)</label>
+                <div class="teeth-row">
+                    <div class="quadrant-group">
+                        <div class="tooth-btn tooth-child" onclick="toggleToothSelection('85', this)">85</div>
+                        <div class="tooth-btn tooth-child" onclick="toggleToothSelection('84', this)">84</div>
+                        <div class="tooth-btn tooth-child" onclick="toggleToothSelection('83', this)">83</div>
+                        <div class="tooth-btn tooth-child" onclick="toggleToothSelection('82', this)">82</div>
+                        <div class="tooth-btn tooth-child" onclick="toggleToothSelection('81', this)">81</div>
+                    </div>
+                    <div class="quadrant-separator"></div>
+                    <div class="quadrant-group">
+                        <div class="tooth-btn tooth-child" onclick="toggleToothSelection('71', this)">71</div>
+                        <div class="tooth-btn tooth-child" onclick="toggleToothSelection('72', this)">72</div>
+                        <div class="tooth-btn tooth-child" onclick="toggleToothSelection('73', this)">73</div>
+                        <div class="tooth-btn tooth-child" onclick="toggleToothSelection('74', this)">74</div>
+                        <div class="tooth-btn tooth-child" onclick="toggleToothSelection('75', this)">75</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="odontogramInputBlock" class="odontogram-form-block">
+            <div style="font-weight: 800; color: var(--pixel-primary); margin-bottom: 12px;">
+                Menginput Data Gigi Nomor: <span id="selectedToothLabel" style="background: var(--pixel-warning); color: #333; padding: 2px 8px; border-radius: 4px;">-</span>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <label>Kondisi / Status Gigi</label>
+                    <select id="toothStatus" class="form-control">
+                        <option value="Caries (Karies/Berlubang)">Caries (Karies/Berlubang)</option>
+                        <option value="Missing (Gigi Tanggal/Hilang)">Missing (Gigi Tanggal/Hilang)</option>
+                        <option value="Radix (Sisa Akar)">Radix (Sisa Akar)</option>
+                        <option value="Amalgam (Tambalan)">Amalgam (Tambalan)</option>
+                        <option value="Normal / Sehat">Normal / Sehat</option>
+                    </select>
+                </div>
+                <div class="col">
+                    <label>Keterangan & Tindakan Medis</label>
+                    <input type="text" id="toothNotes" class="form-control" placeholder="Misal: Pro penambalan, ekstraksi...">
+                </div>
+            </div>
+            <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 15px;">
+                <button type="button" class="btn-pixel" style="background:#858796; color:white;" onclick="cancelSelection()">Batal</button>
+                <button type="button" class="btn-pixel btn-blue" onclick="saveSelectedTeethLog()">Log Temuan Gigi</button>
+            </div>
+        </div>
+
+        <label>Daftar Kondisi Gigi Tersimpan (Sementara)</label>
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th width="120">Nomor Gigi</th>
+                        <th width="220">Status Temuan</th>
+                        <th>Catatan / Tindakan</th>
+                        <th width="60" style="text-align: center;">#</th>
+                    </tr>
+                </thead>
+                <tbody id="toothLogTableBody">
+                    <tr id="emptyToothRow">
+                        <td colspan="4" style="text-align: center; color: var(--pixel-text-muted); font-style: italic;">Belum ada data kondisi gigi yang dimasukkan.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; margin-top: 25px;">
+            <button type="button" class="btn-pixel btn-success" onclick="submitFinalOdontogram()">Simpan</button>
+        </div>
+    </div>
+</div>
+
+<div id="resultCard" class="result-card">
+    <div class="result-header">
+        <h3>Pengkajian Odontogram</h3>
+        <span style="font-size: 11px; font-weight: 800; background: #1cc88a; color: white; padding: 3px 8px; border-radius: 20px;">{Tempat_Layanan}</span>
+    </div>
+    
+    <div class="result-grid-info">
+        <div class="info-item">
+            <span class="info-label">Kategori Pasien</span>
+            <div id="resKategori" class="info-value">-</div>
+        </div>
+        <div class="info-item">
+            <span class="info-label">Waktu Penyimpanan</span>
+            <div id="resWaktu" class="info-value">-</div>
+        </div>
+        <div class="info-item">
+            <span class="info-label">Total Gigi</span>
+            <div id="resTotal" class="info-value">-</div>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="result-table">
+            <thead>
+                <tr>
+                    <th width="150" style="padding-left: 20px;">Nomor Gigi</th>
+                    <th width="250">Status Temuan Klinis</th>
+                    <th style="padding-right: 20px;">Rencana Tindakan / Keterangan</th>
+                </tr>
+            </thead>
+            <tbody id="resultTableBody"></tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    let selectedTeeth = [];
+    let odontogramData = {};
+
+    function switchOdontogramView(type) {
+        cancelSelection();
+        resetAllTeethStyles();
+        odontogramData = {};
+        renderTableRows();
+
+        const viewDewasa = document.getElementById('odontogramDewasa');
+        const viewAnak = document.getElementById('odontogramAnak');
+
+        if (type === 'dewasa') {
+            viewDewasa.style.display = 'flex';
+            viewAnak.style.display = 'none';
+        } else if (type === 'anak') {
+            viewDewasa.style.display = 'none';
+            viewAnak.style.display = 'flex';
+        }
+    }
+
+    function toggleToothSelection(toothNo, element) {
+        const index = selectedTeeth.findIndex(item => item.no === toothNo);
+
+        if (index > -1) {
+            selectedTeeth.splice(index, 1);
+            element.classList.remove('selected');
+        } else {
+            selectedTeeth.push({ no: toothNo, el: element });
+            element.classList.add('selected');
+        }
+
+        if (selectedTeeth.length > 0) {
+            const sortedLabels = selectedTeeth.map(t => t.no).sort((a, b) => a - b).join(', ');
+            document.getElementById('selectedToothLabel').innerText = sortedLabels;
+            document.getElementById('odontogramInputBlock').style.display = 'block';
+        } else {
+            document.getElementById('odontogramInputBlock').style.display = 'none';
+        }
+    }
+
+    function cancelSelection() {
+        selectedTeeth.forEach(item => {
+            item.el.classList.remove('selected');
+        });
+        selectedTeeth = [];
+        document.getElementById('odontogramInputBlock').style.display = 'none';
+    }
+
+    function saveSelectedTeethLog() {
+        if (selectedTeeth.length === 0) return;
+
+        const status = document.getElementById('toothStatus').value;
+        const notes = document.getElementById('toothNotes').value || '-';
+
+        selectedTeeth.forEach(item => {
+            odontogramData[item.no] = {
+                nomor: item.no,
+                status: status,
+                notes: notes
+            };
+
+            item.el.style.background = '#eaecf4';
+            item.el.style.borderColor = '#b7b9cc';
+            item.el.classList.remove('selected');
+        });
+
+        selectedTeeth = [];
+        document.getElementById('odontogramInputBlock').style.display = 'none';
+        renderTableRows();
+    }
+
+    function renderTableRows() {
+        const tbody = document.getElementById('toothLogTableBody');
+        tbody.innerHTML = "";
+
+        const keys = Object.keys(odontogramData).sort((a, b) => a - b);
+
+        if (keys.length === 0) {
+            tbody.innerHTML = `<tr id="emptyToothRow"><td colspan="4" style="text-align: center; color: var(--pixel-text-muted); font-style: italic;">Belum ada data kondisi gigi yang dimasukkan.</td></tr>`;
+            return;
+        }
+
+        keys.forEach(key => {
+            const item = odontogramData[key];
+            const tr = document.createElement('tr');
+            tr.id = `t-row-${item.nomor}`;
+            tr.innerHTML = `
+                <td style="font-weight: 800; color: var(--pixel-primary);">Gigi ${item.nomor}</td>
+                <td><span class="badge-info">${item.status}</span></td>
+                <td>${item.notes}</td>
+                <td><button class="btn-delete" onclick="removeToothRow('${item.nomor}')">🗑</button></td>
+            `;
+            tbody.appendChild(tr);
+        });
+    }
+
+    function removeToothRow(toothNo) {
+        delete odontogramData[toothNo];
+        
+        const buttons = document.querySelectorAll('.tooth-btn');
+        buttons.forEach(btn => {
+            if(btn.innerText === toothNo) {
+                btn.style.background = '';
+                btn.style.borderColor = '';
+            }
+        });
+
+        renderTableRows();
+    }
+
+    function resetAllTeethStyles() {
+        const buttons = document.querySelectorAll('.tooth-btn');
+        buttons.forEach(btn => {
+            btn.style.background = '';
+            btn.style.borderColor = '';
+            btn.classList.remove('selected');
+        });
+    }
+
+    function submitFinalOdontogram() {
+        const patientCategoryEl = document.querySelector('input[name="patient_category"]:checked');
+        
+        if (!patientCategoryEl) {
+            alert("Silakan pilih Kategori Pasien terlebih dahulu!");
+            return;
+        }
+
+        const kategori = patientCategoryEl.value === 'dewasa' ? 'Pasien Dewasa (Gigi Permanen)' : 'Pasien Anak (Gigi Susu)';
+        const waktuSekarang = new Date().toLocaleString('id-ID', { dateStyle: 'long', timeStyle: 'short' });
+        const totalTemuan = Object.keys(odontogramData).length;
+
+        document.getElementById('resKategori').innerText = kategori;
+        document.getElementById('resWaktu').innerText = waktuSekarang + " WIB";
+        document.getElementById('resTotal').innerText = totalTemuan + " Gigi";
+
+        const resTableBody = document.getElementById('resultTableBody');
+        resTableBody.innerHTML = "";
+
+        if (totalTemuan === 0) {
+            resTableBody.innerHTML = `<tr><td colspan="3" style="text-align: center; color: var(--pixel-text-muted); padding: 20px; font-style: italic;">Seluruh struktur gigi normal / Tidak ada rekam kelainan yang disimpan.</td></tr>`;
+        } else {
+            const sortedTeeth = Object.keys(odontogramData).sort((a,b) => a - b);
+            
+            sortedTeeth.forEach(key => {
+                const item = odontogramData[key];
+                const isNormal = item.status.includes("Normal");
+                const badgeClass = isNormal ? 'badge-result normal' : 'badge-result';
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td style="padding-left: 20px; font-weight: 800; color: var(--pixel-primary);">Gigi Nomor ${item.nomor}</td>
+                    <td><span class="${badgeClass}">${item.status}</span></td>
+                    <td style="padding-right: 20px; font-weight: 600;">${item.notes}</td>
+                `;
+                resTableBody.appendChild(tr);
+            });
+        }
+
+        const resultCard = document.getElementById('resultCard');
+        resultCard.style.display = 'block';
+        resultCard.scrollIntoView({ behavior: 'smooth' });
+    }
+</script>
+
+</body>
+</html>
