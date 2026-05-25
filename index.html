@@ -308,10 +308,10 @@
             <label>Jenis Kategori Pasien <span class="required">*</span></label>
             <div class="radio-group">
                 <label class="radio-item">
-                    <input type="radio" name="patient_category" value="dewasa" onclick="switchOdontogramView('dewasa')"> Pasien Dewasa (Gigi Permanen)
+                    <input type="radio" name="patient_category" value="dewasa" onclick="switchOdontogramView('dewasa')"> Pasien Dewasa
                 </label>
                 <label class="radio-item">
-                    <input type="radio" name="patient_category" value="anak" onclick="switchOdontogramView('anak')"> Pasien Anak (Gigi Susu)
+                    <input type="radio" name="patient_category" value="anak" onclick="switchOdontogramView('anak')"> Pasien Anak
                 </label>
             </div>
         </div>
@@ -386,6 +386,8 @@
                 <label style="margin-bottom: 2px; color: var(--pixel-text-dark)">Rahang Atas (Susu)</label>
                 <div class="teeth-row">
                     <div class="quadrant-group">
+                        <div class="tooth-btn" onclick="toggleToothSelection('17', this)">17</div>
+                        <div class="tooth-btn" onclick="toggleToothSelection('16', this)">16</div>
                         <div class="tooth-btn tooth-child" onclick="toggleToothSelection('55', this)">55</div>
                         <div class="tooth-btn tooth-child" onclick="toggleToothSelection('54', this)">54</div>
                         <div class="tooth-btn tooth-child" onclick="toggleToothSelection('53', this)">53</div>
@@ -399,6 +401,8 @@
                         <div class="tooth-btn tooth-child" onclick="toggleToothSelection('63', this)">63</div>
                         <div class="tooth-btn tooth-child" onclick="toggleToothSelection('64', this)">64</div>
                         <div class="tooth-btn tooth-child" onclick="toggleToothSelection('65', this)">65</div>
+                        <div class="tooth-btn" onclick="toggleToothSelection('26', this)">26</div>
+                        <div class="tooth-btn" onclick="toggleToothSelection('27', this)">27</div>
                     </div>
                 </div>
             </div>
@@ -407,6 +411,8 @@
                 <label style="margin-bottom: 2px; color: var(--pixel-text-dark)">Rahang Bawah (Susu)</label>
                 <div class="teeth-row">
                     <div class="quadrant-group">
+                        <div class="tooth-btn" onclick="toggleToothSelection('47', this)">47</div>
+                        <div class="tooth-btn" onclick="toggleToothSelection('46', this)">46</div>
                         <div class="tooth-btn tooth-child" onclick="toggleToothSelection('85', this)">85</div>
                         <div class="tooth-btn tooth-child" onclick="toggleToothSelection('84', this)">84</div>
                         <div class="tooth-btn tooth-child" onclick="toggleToothSelection('83', this)">83</div>
@@ -420,6 +426,8 @@
                         <div class="tooth-btn tooth-child" onclick="toggleToothSelection('73', this)">73</div>
                         <div class="tooth-btn tooth-child" onclick="toggleToothSelection('74', this)">74</div>
                         <div class="tooth-btn tooth-child" onclick="toggleToothSelection('75', this)">75</div>
+                        <div class="tooth-btn" onclick="toggleToothSelection('36', this)">36</div>
+                        <div class="tooth-btn" onclick="toggleToothSelection('37', this)">37</div>
                     </div>
                 </div>
             </div>
